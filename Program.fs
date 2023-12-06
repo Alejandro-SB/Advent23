@@ -1,6 +1,6 @@
 ﻿// For more information see https://aka.ms/fsharp-console-apps
 open Day1
 
-let o = Day2.part2()
+let o = day3.run()
 
 printfn ""
