@@ -37,14 +37,31 @@ let run () =
         |> Array.map _.Split(':')
         |> Array.map cardPartsToCard            
 
+    let totalWinningNumbers card =
+        card.playingNumbers
+        |> List.filter (fun n -> List.contains n card.winningNumbers)
+        |> List.length
+
     let cardScore card = 
-        let winners = 
-            card.playingNumbers 
-            |> List.filter (fun n -> List.contains n card.winningNumbers)
-            |> List.length
+        let winners = totalWinningNumbers card
         if winners > 0 then pown(2) (winners - 1) else 0
     
     cards 
     |> Array.map cardScore
     |> Array.sum
     |> printfn "%d"
+
+    let rec computeCards (cardsToCompute: Card array) =
+        let cardValues = cardsToCompute |> Array.map (fun card ->
+            let winners = totalWinningNumbers card
+            match winners with 
+             | 0 -> 1
+             | _ -> computeCards cardsToCompute[1..winners + 1]
+        ) 
+
+        match cardValues with 
+            | [||] -> 1
+            | a -> a |> Array.sum
+
+    let total = cards |> computeCards 
+    total |> printfn "%d"

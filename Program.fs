@@ -2,5 +2,4 @@
 open Day1
 
 let o = day4.run()
-
 printfn ""
